@@ -6,32 +6,8 @@ using UnityEngine;
 public class PlayerKnight : Sense
 {
 
-    [SerializeField] private float movementSpeed = 10.0f;
-    [SerializeField] private float rotSpeed = 2.0f;
-    [SerializeField] private float targetReactionRadius = 5.0f;
-    [SerializeField] private float wallReactionRadius = 4.0f;
-    private float _health = 100.0f;
-
-    /*private void Update ()
-    {
-        // Spot player from trespassing walls
-        if (Physics.Linecast(transform.position, targetTransform.position, out var hit))
-        {
-            if (hit.transform.CompareTag($"wall") && Vector3.Distance (transform.position, hit.transform.position) < wallReactionRadius)
-            {
-                return;
-            }
-        }
-        // Stop if reached destiny
-        if (Vector3.Distance(transform.position, targetTransform.position) < targetReactionRadius) return;
-        var tarPos = targetTransform.position;
-        tarPos.y = transform.position.y;
-        var dirRot = tarPos - transform.position;
-        var tarRot = Quaternion.LookRotation(dirRot);
-        transform.rotation = Quaternion.Slerp(transform.rotation, tarRot, rotSpeed * Time.deltaTime);
-        transform.Translate(new Vector3(0, 0, movementSpeed * Time.deltaTime));
-    }*/
-    
+    [SerializeField] private GameObject gameOverScreen;
+    [SerializeField] private float _health = 100.0f;
     public int FieldOfView = 45;
     public int ViewDistance = 100;
     private GameObject target;
@@ -96,10 +72,9 @@ public class PlayerKnight : Sense
     public void OnDamage(float damage)
     {
         _health -= damage;
-        if (_health <= 0)
-        {
-            Debug.Log("I'M DEAD!");
-        }
+        if (!(_health <= 0)) return;
+        gameOverScreen.SetActive(true);
+        Time.timeScale = 0;
     }
 
     private void OnTriggerEnter(Collider other)
