@@ -6,15 +6,14 @@ using UnityEngine;
 public class Sight : Sense
 {
     public int FieldOfView = 45;
-
     public int ViewDistance = 100;
-
+    private GameObject player;
     private Transform playerTransform;
-
     private Vector3 rayDirection;
 
     protected override void Initialize()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
@@ -34,9 +33,23 @@ public class Sight : Sense
         if (!(Vector3.Angle(rayDirection, transform.forward) < FieldOfView) ||
             !Physics.Raycast(transform.position, rayDirection, out var hit, ViewDistance)) return;
         var aspect = hit.collider.GetComponent<Aspect>();
-        if (aspect != null && aspect.aspectName == targetAfiliation)
+        if (aspect == null)
         {
-            Debug.Log("Enemy detected!");
+            GetComponent<Wander>().enabled = true;
+            GetComponent<Combat>().Idle();
+            return;
+        }
+        // Enemy
+        if (aspect.aspectName == targetAfiliation)
+        {
+            // Follow
+            GetComponent<Wander>().enabled = false;
+            GetComponent<Combat>().Follow(player);
+        }
+        else
+        {
+            GetComponent<Wander>().enabled = true;
+            GetComponent<Combat>().Idle();
         }
     }
 

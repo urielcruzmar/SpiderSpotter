@@ -14,7 +14,7 @@ public class Wander : MonoBehaviour
     [SerializeField] private float maxZ = -45.0f;
     [SerializeField] private float targetReactionRadius = 5.0f;
     [SerializeField] private float targetVerticalOffset = 0.5f;
-    
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -24,16 +24,19 @@ public class Wander : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (!(Vector3.Distance(targetPosition, transform.position) <= targetReactionRadius)) return;
-        GetNextPosition();
+        if (Vector3.Distance(targetPosition, transform.position) <= targetReactionRadius)
+        {
+            GetNextPosition();
+        }
         // Rotate and translate
         var targetRotation = Quaternion.LookRotation(targetPosition - transform.position);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         transform.Translate(new Vector3(0f, 0f, movementSpeed * Time.deltaTime));
     }
     
-    private void GetNextPosition()
+    public void GetNextPosition()
     {
         targetPosition = new Vector3(Random.Range(minX, maxX), targetVerticalOffset, Random.Range(minZ, maxZ));
     }
+
 }

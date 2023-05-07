@@ -7,10 +7,17 @@ public class Touch : Sense
 {
     private void OnTriggerEnter(Collider other)
     {
-        Aspect aspect = other.GetComponent<Aspect>();
+        var aspect = other.GetComponent<Aspect>();
         if (aspect != null && aspect.aspectName == targetAfiliation)
         {
-            Debug.Log("Enemy touched!");
+            GetComponent<Combat>().Attack(other.gameObject, 10.0f);
+        }
+        // Obstacle
+        else if (aspect.aspectName == Aspect.AspectName.Obstacle)
+        {
+            GetComponent<Wander>().enabled = true;
+            GetComponent<Combat>().Idle();
+            GetComponent<Wander>().GetNextPosition();
         }
     }
 }

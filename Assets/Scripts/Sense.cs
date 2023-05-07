@@ -12,15 +12,9 @@ public class Sense : MonoBehaviour
 
     protected float ElapsedTime = 0.0f;
 
-    protected virtual void Initialize()
-    {
-        throw new System.NotImplementedException();
-    }
+    protected virtual void Initialize(){ }
 
-    protected virtual void UpdateSense()
-    {
-        throw new System.NotImplementedException();
-    }
+    protected virtual void UpdateSense(){ }
 
     // Start is called before the first frame update
     void Start()
